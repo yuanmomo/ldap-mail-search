@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.comverse.ldap.mybatis.mapper.IPersonMapper">
+	<insert id="insert" parameterType="Person" useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO person
+		(NAME,MAIL,DN,CN,SN,OU,DESCRIPTION,INVALID,UPDATETIME,LOGINNAME)
+		VALUES(#{name},#{mail},#{dn},#{cn},#{sn},#{ou},#{description},#{invalid},#{updateTime},#{loginName})
+	</insert>
+	<update id="update" parameterType="Person">
+		UPDATE person SET
+		NAME=#{name},MAIL=#{mail},
+		CN=#{cn},SN=#{sn},OU=#{ou},description=#{description},
+		UPDATETIME=#{updateTime},LOGINNAME=#{loginName},
+		INVALID=#{invalid}
+		WHERE DN=#{dn}
+	</update>
+	<update id="updateCellphone" parameterType="Person">
+		UPDATE person SET
+		CELLPHONE=#{cellPhone},UPDATETIME=#{updateTime}
+		WHERE LOGINNAME=#{loginName}
+	</update>
+	<update id="invalid" parameterType="String">
+		UPDATE person SET INVALID='1',UPDATETIME=NOW() 
+		WHERE id not in
+		<foreach item="personList" collection="list" open="("
+			separator="," close=")">
+			#{personList.id}
+		</foreach> and invalid='0'
+	</update>
+	<select id="isExist" resultType="int" parameterType="String">
+		SELECT
+		count(*)
+		FROM person WHERE dn = #{dn} AND INVALID=0
+	</select>
+	<select id="search" resultType="Person" parameterType="String">
+		SELECT ID,NAME,MAIL,DN,CN,SN,OU,DESCRIPTION,INVALID,UPDATETIME,LOGINNAME,LOGINPASSWORD,CELLPHONE,PHONEEXT
+		FROM person WHERE upper(CN) like upper(#{keyStr}) or upper(MAIL) like upper(#{keyStr}) AND INVALID=0 ORDER BY NAME
+	</select>
+	<select id="getByDn" resultType="Person" parameterType="String">
+		SELECT ID,NAME,MAIL,DN,CN,SN,OU,DESCRIPTION,INVALID,UPDATETIME,LOGINNAME,LOGINPASSWORD,CELLPHONE,PHONEEXT
+		FROM person WHERE upper(DN) = upper(#{dn}) AND INVALID=0
+	</select>
+	<select id="getByLoginName" resultType="Person" parameterType="String">
+		SELECT ID,NAME,MAIL,DN,CN,SN,OU,DESCRIPTION,INVALID,UPDATETIME,LOGINNAME,LOGINPASSWORD,CELLPHONE,PHONEEXT
+		FROM person WHERE LOGINNAME= #{loginName} AND INVALID=0
+	</select>
+</mapper>

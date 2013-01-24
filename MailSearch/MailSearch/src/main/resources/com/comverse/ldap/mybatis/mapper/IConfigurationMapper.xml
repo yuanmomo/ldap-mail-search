@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.comverse.ldap.mybatis.mapper.IConfigurationMapper">
+	<insert id="insert" parameterType="Configuration" useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO configuration
+		(NAME,VALUE,INUSE)
+		VALUES(#{name},#{value},#{inUse})
+	</insert>
+	<update id="update" parameterType="Configuration">
+		UPDATE configuration SET
+		NAME=#{name},VALUE=#{value},
+		INUSE=#{inUse}
+		WHERE id=#{id}
+	</update>
+	<delete id="unuse" parameterType="Configuration">
+		UPDATE configuration SET
+		INUSE='0' WHERE id=#{id}
+	</delete>
+	<select id="getByName" resultType="Configuration" parameterType="String">
+		SELECT ID,NAME,VALUE,INUSE 
+		FROM configuration 
+		WHERE NAME = #{name}
+	</select>
+	<select id="queryAll" resultType="Configuration">
+		SELECT ID,NAME,VALUE,INUSE 
+		FROM configuration 
+	</select>
+</mapper>
