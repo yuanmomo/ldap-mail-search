@@ -8,6 +8,8 @@ import net.yuanmomo.cdut.course.web.bean.UserTable;
 import net.yuanmomo.cdut.course.web.bean.entity.UserLoginEntity;
 
 public interface IUserTableDAO {
+
+	//test git
 	//do insert a student
 	public boolean doInsertAStu(UserTable user);
 	//do insert a teacher
