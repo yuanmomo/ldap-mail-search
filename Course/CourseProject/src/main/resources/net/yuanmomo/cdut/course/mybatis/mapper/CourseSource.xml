@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="net.yuanmomo.cudt.course.web.dao.mapper.CourseSource">
+	<select id="getCourseSourceObjById" parameterType="int" resultType="CourseSource">
+		SELECT  ID,SOURCENAME,SOURCECHAR,ISDELETED 
+		FROM  COURSESOURCE WHERE ISDELETED=0 AND ID=#{id}
+	</select>
+	<select id="getCourseSourceObjByName" parameterType="String" resultType="CourseSource">
+		SELECT  ID,SOURCENAME,SOURCECHAR,ISDELETED 
+		FROM  COURSESOURCE WHERE ISDELETED=0 AND SOURCENAME=#{name}
+	</select>
+	<select id="queryAllCourseSourceObj" resultType="CourseSource">
+		SELECT  ID,SOURCENAME,SOURCECHAR,ISDELETED 
+		FROM  COURSESOURCE WHERE ISDELETED=0
+	</select>
+</mapper>

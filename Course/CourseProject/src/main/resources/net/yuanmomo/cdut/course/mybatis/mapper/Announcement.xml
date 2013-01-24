@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="net.yuanmomo.cudt.course.web.dao.mapper.Announcement">
+	<select id="getAnnouncementById" parameterType="int" resultType="Announcement">
+		SELECT ID, TITLE, CONTENT, PUBLISHTIME, ISDELETED
+		FROM ANNOUNCEMENT
+		WHERE ID=#{id} AND ISDELETED=0
+	</select>
+	<insert id="doInsert" parameterType="Announcement"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ANNOUNCEMENT(TITLE,CONTENT)
+		VALUES (#{title},#{content})
+	</insert>
+	<delete id="doDelete" parameterType="int">
+		UPDATE  ANNOUNCEMENT SET ISDELETED='1' WHERE ID =#{id}
+	</delete>
+	<update id="doUpdate" parameterType="Announcement">
+		UPDATE  ANNOUNCEMENT SET  TITLE = #{title},CONTENT=#{content} WHERE  ID =#{id} 
+	</update>
+	<select id="doQuery" parameterType="int" resultType="Announcement">
+		SELECT ID, TITLE, CONTENT, PUBLISHTIME, ISDELETED
+		FROM ANNOUNCEMENT WHERE ISDELETED='0' ORDER BY PUBLISHTIME DESC 
+	</select>
+	<select id="getCount" resultType="int">
+		SELECT COUNT(*)FROM ANNOUNCEMENT WHERE ISDELETED='0'
+	</select>
+	<delete id="initialSystem">
+		delete from announcement where id>0;	
+	</delete>
+</mapper>

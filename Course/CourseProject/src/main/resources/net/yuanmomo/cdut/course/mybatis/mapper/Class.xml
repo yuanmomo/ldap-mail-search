@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="net.yuanmomo.cudt.course.web.dao.mapper.Class">
+	<insert id="doInsert" parameterType="Class"
+		useGeneratedKeys="true" keyProperty="classId">
+		INSERT INTO CLASSTABLE (CLASSNAMENUMBER,CLASSNAMECHI,INMAJOR) 
+		VALUES(#{classNameNumber},#{classNameChi},#{inMajor})
+	</insert>
+	<update id="doUpdate" parameterType="Class">
+		UPDATE CLASSTABLE SET CLASSNAMENUMBER=#{classNameNumber},CLASSNAMECHI=#{classNameChi},
+		INMAJOR=#{inMajor} WHERE CLASSID=#{classId}; 
+	</update>
+	<delete id="doDelete" parameterType="int">
+		UPDATE CLASSTABLE SET ISDELETED='1' WHERE CLASSID=#{classId}
+	</delete>
+	<select id="getClassByClassNameNumber" resultType="Class" parameterType="String">
+		SELECT  CLASSID,CLASSNAMENUMBER,CLASSNAMECHI,INMAJOR,ISDELETED 
+		FROM CLASSTABLE WHERE CLASSNAMENUMBER =#{classNameNumber}
+	</select>
+	<select id="getClassByClassNameChi" resultType="Class" parameterType="String">
+		SELECT  CLASSID,CLASSNAMENUMBER,CLASSNAMECHI,INMAJOR,ISDELETED 
+		FROM CLASSTABLE WHERE CLASSNAMECHI =#{classNameChi}%
+	</select>
+	<select id="getClassByClassId" resultType="ClassDetail" parameterType="int">
+		SELECT  A1.CLASSID,A1.CLASSNAMENUMBER,A1.CLASSNAMECHI,A1.INMAJOR,A1.ISDELETED,
+		A2.MAJORNAME AS 'majorName',A2.MAJORNUMBER AS 'majorNumber'
+		FROM CLASSTABLE A1,MAJORTABLE A2 WHERE A1.INMAJOR=A2.MAJORID 
+		AND A1.CLASSID=#{classId} AND A1.ISDELETED=0
+	</select>
+	<select id="getClassedByMajorId" resultType="Class" parameterType="int">
+		SELECT  CLASSID,CLASSNAMENUMBER,CLASSNAMECHI,INMAJOR,ISDELETED 
+		FROM CLASSTABLE  WHERE INMAJOR=#{majorId} AND ISDELETED=0
+	</select>	
+	<select id="getAllClasses" resultType="ClassDetail">
+		SELECT  A1.CLASSID,A1.CLASSNAMENUMBER,A1.CLASSNAMECHI,A1.INMAJOR,A1.ISDELETED,
+		A2.MAJORNAME AS 'majorName',A2.MAJORNUMBER AS 'majorNumber'
+		FROM CLASSTABLE A1,MAJORTABLE A2 WHERE A1.INMAJOR=A2.MAJORID AND A1.ISDELETED=0
+	</select>	
+	<select id="getCount" resultType="int">
+		SELECT COUNT(*)
+		FROM CLASSTABLE A1,MAJORTABLE A2 WHERE A1.INMAJOR=A2.MAJORID AND A1.ISDELETED=0
+	</select>
+	<select id="isClassNumberExsit" resultType="int" parameterType="String">
+		SELECT CLASSID FROM  CLASSTABLE WHERE ISDELETED=0 AND CLASSNAMENUMBER LIKE #{classNumber}
+	</select>
+	<select id="isClassNameExsit" resultType="int" parameterType="String">
+		SELECT CLASSID FROM  CLASSTABLE WHERE ISDELETED=0 AND CLASSNAMECHI LIKE #{className}
+	</select>
+</mapper>
